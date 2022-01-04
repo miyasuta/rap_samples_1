@@ -1,0 +1,58 @@
+managed implementation in class zbp_person_m unique;
+strict;
+with draft;
+
+define behavior for ZI_PERSON_M alias Person
+persistent table zperson_m
+draft table zperson_m_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master( global )
+
+{
+  field ( readonly )
+   PersonUUID,
+   CreatedAt,
+   CreatedBy,
+   LastChangedAt,
+   LocalLastChangedAt,
+   LastChangedBy,
+   Email;
+
+  field ( numbering : managed )
+   PersonUUID;
+
+  field ( mandatory )
+  FirstName,
+  LastName;
+
+  determination set_email on save {create; }
+  validation mandatory_check on save {create; update; field FirstName, LastName; }
+
+  action ( features: instance ) set_complete result [1] $self;
+
+  create;
+  update;
+  delete;
+
+  draft action Edit;
+  draft action Activate;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  mapping for ZPERSON_M
+  {
+    PersonUUID = PERSON_UUID;
+    FirstName = FIRST_NAME;
+    LastName = LAST_NAME;
+    Email = EMAIL;
+    Birthday = BIRTHDAY;
+    Status = STATUS;
+    CreatedBy = CREATED_BY;
+    CreatedAt = CREATED_AT;
+    LastChangedBy = LAST_CHANGED_BY;
+    LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+    LastChangedAt = LAST_CHANGED_AT;
+  }
+}

@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition forZC_PERSON_M'
+define service ZPERSON_M {
+  expose ZC_PERSON_M as Person;
+}
